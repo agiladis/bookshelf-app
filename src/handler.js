@@ -75,7 +75,24 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = (request, h) => {
-  const filteredBooks = books;
+  const { name, reading, finished } = request.query;
+  let filteredBooks = books;
+
+  if (name) {
+    filteredBooks = filteredBooks.filter(
+      (book) => book.name.toLowerCase().includes(name.toLowerCase()),
+    );
+  }
+
+  if (reading) {
+    filteredBooks = filteredBooks.filter((book) => book.reading === !Number(reading));
+  }
+
+  if (finished) {
+    filteredBooks = filteredBooks.filter(
+      (book) => book.finished === !!Number(finished),
+    );
+  }
 
   const response = h.response({
     status: 'success',
